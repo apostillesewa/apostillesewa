@@ -1,11 +1,20 @@
-import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState } from "react";
 import { Header } from "@/components/site/Header";
 import { FloatingWhatsApp } from "@/components/site/FloatingWhatsApp";
 import { Footer } from "@/components/site/Footer";
 import { COUNTRIES } from "@/components/site/Destinations";
 import { Flag } from "@/components/site/Flag";
-import { ArrowLeft, CheckCircle2, Clock, FileText, Stamp, Building2, Send, ArrowRight } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Clock, FileText, Stamp, Building2, Send, ArrowRight, MessageCircle, ChevronDown } from "lucide-react";
+
+const DOC_TYPES = [
+  "Academic Degree / Transcript",
+  "Birth / Marriage Certificate",
+  "Police Clearance Certificate (PCC)",
+  "Commercial Invoice",
+];
+
+const WHATSAPP_NUMBER = "9771000000000";
 
 const CHECKLIST: Record<string, { step: string; detail: string; icon: typeof Stamp }[]> = {
   default: [
