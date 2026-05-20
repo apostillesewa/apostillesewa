@@ -1,4 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useRouterState } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { Header } from "@/components/site/Header";
 import { FloatingWhatsApp } from "@/components/site/FloatingWhatsApp";
 import { Hero } from "@/components/site/Hero";
@@ -24,8 +25,16 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const hash = useRouterState({ select: (s) => s.location.hash });
+  useEffect(() => {
+    if (!hash) return;
+    const el = document.getElementById(hash.replace(/^#/, ""));
+    if (el) setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
+  }, [hash]);
+
   return (
     <div className="min-h-screen bg-background">
+
       <Header />
       <main>
         <Hero />

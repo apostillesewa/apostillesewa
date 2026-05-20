@@ -18,7 +18,7 @@ export const COUNTRIES: {
 
 export function Destinations() {
   return (
-    <section className="border-b border-border bg-[var(--surface)]">
+    <section id="destinations" className="scroll-mt-24 border-b border-border bg-[var(--surface)]">
       <div className="mx-auto max-w-7xl px-6 py-20">
         <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
           <div className="max-w-xl">
