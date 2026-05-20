@@ -4,6 +4,7 @@ import { Header } from "@/components/site/Header";
 import { FloatingWhatsApp } from "@/components/site/FloatingWhatsApp";
 import { Footer } from "@/components/site/Footer";
 import { COUNTRIES } from "@/components/site/Destinations";
+import { Flag } from "@/components/site/Flag";
 import { ArrowLeft, CheckCircle2, Clock, FileText, Stamp, Building2, Send, ArrowRight } from "lucide-react";
 
 const CHECKLIST: Record<string, { step: string; detail: string; icon: typeof Stamp }[]> = {
@@ -49,8 +50,8 @@ function CountryPage() {
               <ArrowLeft className="h-3.5 w-3.5" /> Back to all destinations
             </Link>
             <div className="mt-6 flex flex-wrap items-center gap-5">
-              <span className="flex h-16 w-16 items-center justify-center rounded-full border border-border bg-background text-4xl shadow-elegant">
-                {country.flag}
+              <span className="flex h-14 w-20 items-center justify-center overflow-hidden rounded-md border border-border bg-background shadow-elegant">
+                <Flag code={country.code} title={country.name} />
               </span>
               <div>
                 <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
