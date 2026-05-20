@@ -208,11 +208,3 @@ function CountryPage() {
     </div>
   );
 }
-          </div>
-        </section>
-      </main>
-      <Footer />
-      <FloatingWhatsApp />
-    </div>
-  );
-}
