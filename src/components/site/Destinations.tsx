@@ -1,13 +1,19 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
+import { Flag, type CountryCode } from "./Flag";
 
-export const COUNTRIES = [
-  { slug: "poland", name: "Poland", flag: "🇵🇱", note: "Required for: Work Permits & National Visas. Includes: Full MOFA + Embassy Stamping." },
-  { slug: "germany", name: "Germany", flag: "🇩🇪", note: "Required for: Student & Blue Card Visas. Includes: MOFA + Anabin recognition guidance." },
-  { slug: "croatia", name: "Croatia", flag: "🇭🇷", note: "Required for: Seasonal & Work Permits. Includes: Full MOFA + Embassy Stamping." },
-  { slug: "malta", name: "Malta", flag: "🇲🇹", note: "Required for: Single Permit Applications. Includes: MOFA + Apostille verification." },
-  { slug: "portugal", name: "Portugal", flag: "🇵🇹", note: "Required for: Job-Seeker & D7 Visas. Includes: MOFA + Apostille for SEF." },
-  { slug: "cyprus", name: "Cyprus", flag: "🇨🇾", note: "Required for: Work & Student Permits. Includes: Full MOFA + Embassy Stamping." },
+export const COUNTRIES: {
+  slug: string;
+  name: string;
+  code: CountryCode;
+  note: string;
+}[] = [
+  { slug: "poland", code: "PL", name: "Poland", note: "Required for: Work Permits & National Visas. Includes: Full MOFA + Embassy Stamping." },
+  { slug: "germany", code: "DE", name: "Germany", note: "Required for: Student & Blue Card Visas. Includes: MOFA + Anabin recognition guidance." },
+  { slug: "croatia", code: "HR", name: "Croatia", note: "Required for: Seasonal & Work Permits. Includes: Full MOFA + Embassy Stamping." },
+  { slug: "malta", code: "MT", name: "Malta", note: "Required for: Single Permit Applications. Includes: MOFA + Apostille verification." },
+  { slug: "portugal", code: "PT", name: "Portugal", note: "Required for: Job-Seeker & D7 Visas. Includes: MOFA + Apostille for SEF." },
+  { slug: "cyprus", code: "CY", name: "Cyprus", note: "Required for: Work & Student Permits. Includes: Full MOFA + Embassy Stamping." },
 ];
 
 export function Destinations() {
@@ -37,8 +43,8 @@ export function Destinations() {
               className="group flex flex-col rounded-2xl border border-border bg-card p-6 shadow-elegant transition-all hover:-translate-y-1 hover:border-primary/30"
             >
               <div className="flex items-center justify-between">
-                <span className="flex h-12 w-12 items-center justify-center rounded-full border border-border bg-background text-2xl">
-                  {c.flag}
+                <span className="flex h-12 w-16 items-center justify-center overflow-hidden rounded-md border border-border bg-background shadow-sm">
+                  <Flag code={c.code} title={c.name} />
                 </span>
                 <ArrowUpRight className="h-4 w-4 text-muted-foreground transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-primary" />
               </div>

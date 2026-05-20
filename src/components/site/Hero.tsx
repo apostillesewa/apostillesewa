@@ -3,12 +3,28 @@ import { PathFinder } from "./PathFinder";
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden border-b border-border">
+    <section className="relative overflow-hidden border-b border-border bg-background">
+      {/* Ultra-faint engineering grid */}
       <div
-        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.35]"
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10"
         style={{
           backgroundImage:
-            "radial-gradient(circle at 20% 0%, color-mix(in oklab, var(--primary) 10%, transparent), transparent 55%), radial-gradient(circle at 100% 100%, color-mix(in oklab, var(--success) 8%, transparent), transparent 50%)",
+            "linear-gradient(rgba(37,99,235,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(37,99,235,0.045) 1px, transparent 1px)",
+          backgroundSize: "44px 44px",
+          maskImage:
+            "radial-gradient(ellipse 90% 70% at 50% 30%, #000 40%, transparent 85%)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse 90% 70% at 50% 30%, #000 40%, transparent 85%)",
+        }}
+      />
+      {/* Soft radial glow behind Path-Finder */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle at 78% 45%, rgba(37,99,235,0.10), transparent 55%), radial-gradient(circle at 12% 10%, rgba(37,99,235,0.04), transparent 50%), radial-gradient(circle at 100% 100%, rgba(16,185,129,0.05), transparent 55%)",
         }}
       />
       <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:py-28">

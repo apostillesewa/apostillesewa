@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { ArrowRight, CheckCircle2, Clock, FileText, MapPin, X, Loader2 } from "lucide-react";
+import { ArrowRight, CheckCircle2, Clock, FileText, MapPin, X, MessageCircle, ClipboardList } from "lucide-react";
+import { Flag, type CountryCode } from "./Flag";
 
 const DOC_TYPES = [
   "Academic Degree / Transcript",
@@ -8,15 +9,46 @@ const DOC_TYPES = [
   "Commercial Invoice",
 ];
 
-const COUNTRIES = [
-  { name: "Poland", flag: "🇵🇱", embassyDays: "9 Working Days" },
-  { name: "Germany", flag: "🇩🇪", embassyDays: "12 Working Days" },
-  { name: "Croatia", flag: "🇭🇷", embassyDays: "10 Working Days" },
-  { name: "Malta", flag: "🇲🇹", embassyDays: "8 Working Days" },
-  { name: "Portugal", flag: "🇵🇹", embassyDays: "11 Working Days" },
-  { name: "Cyprus", flag: "🇨🇾", embassyDays: "7 Working Days" },
-  { name: "Czech Republic", flag: "🇨🇿", embassyDays: "10 Working Days" },
+type Country = {
+  name: string;
+  code: CountryCode;
+  embassyDays: string;
+};
+
+const COUNTRIES: Country[] = [
+  { name: "Poland", code: "PL", embassyDays: "9 Working Days" },
+  { name: "Germany", code: "DE", embassyDays: "12 Working Days" },
+  { name: "Croatia", code: "HR", embassyDays: "10 Working Days" },
+  { name: "Malta", code: "MT", embassyDays: "8 Working Days" },
+  { name: "Portugal", code: "PT", embassyDays: "11 Working Days" },
+  { name: "Cyprus", code: "CY", embassyDays: "7 Working Days" },
+  { name: "Czech Republic", code: "CZ", embassyDays: "10 Working Days" },
 ];
+
+const REQUIREMENTS: Record<string, string[]> = {
+  "Academic Degree / Transcript": [
+    "Original Degree / Transcript",
+    "Tribhuvan University / Board verification letter",
+    "Passport copy (photo page)",
+  ],
+  "Birth / Marriage Certificate": [
+    "Original certificate from Ward office / DAO",
+    "Citizenship copy of applicant",
+    "Passport copy (photo page)",
+  ],
+  "Police Clearance Certificate (PCC)": [
+    "Original PCC from Metropolitan Police HQ",
+    "Citizenship copy",
+    "Passport copy (photo page)",
+  ],
+  "Commercial Invoice": [
+    "Original invoice signed by authorised signatory",
+    "Company registration (PAN / VAT) copy",
+    "Chamber of Commerce endorsement",
+  ],
+};
+
+const WHATSAPP_NUMBER = "9771000000000";
 
 export function PathFinder() {
   const [doc, setDoc] = useState("");
@@ -41,11 +73,7 @@ export function PathFinder() {
         </p>
 
         <div className="mt-6 space-y-5">
-          <Field
-            step={1}
-            icon={<FileText className="h-4 w-4" />}
-            label="Select Document Type"
-          >
+          <Field step={1} icon={<FileText className="h-4 w-4" />} label="Select Document Type">
             <select
               value={doc}
               onChange={(e) => setDoc(e.target.value)}
@@ -58,11 +86,7 @@ export function PathFinder() {
             </select>
           </Field>
 
-          <Field
-            step={2}
-            icon={<MapPin className="h-4 w-4" />}
-            label="Select Target European Country"
-          >
+          <Field step={2} icon={<MapPin className="h-4 w-4" />} label="Select Target European Country">
             <select
               value={country}
               onChange={(e) => setCountry(e.target.value)}
@@ -92,11 +116,7 @@ export function PathFinder() {
       </div>
 
       {open && selectedCountry && (
-        <EstimateModal
-          doc={doc}
-          country={selectedCountry}
-          onClose={() => setOpen(false)}
-        />
+        <EstimateModal doc={doc} country={selectedCountry} onClose={() => setOpen(false)} />
       )}
     </>
   );
@@ -135,10 +155,15 @@ function EstimateModal({
   onClose,
 }: {
   doc: string;
-  country: (typeof COUNTRIES)[number];
+  country: Country;
   onClose: () => void;
 }) {
-  const [submitted, setSubmitted] = useState(false);
+  const requirements = REQUIREMENTS[doc] ?? [];
+
+  const message = encodeURIComponent(
+    `Hi Apostille Sewa, I'd like to fast-track my legalization request.\n\n• Document: ${doc}\n• Destination: ${country.name}\n• Expected turnaround: 48 hrs MOFA + ${country.embassyDays} Embassy\n\nPlease share the next steps.`,
+  );
+  const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
 
   return (
     <div
@@ -152,6 +177,7 @@ function EstimateModal({
         <button
           onClick={onClose}
           className="absolute right-4 top-4 rounded-md p-1.5 text-muted-foreground hover:bg-muted"
+          aria-label="Close"
         >
           <X className="h-4 w-4" />
         </button>
@@ -161,16 +187,21 @@ function EstimateModal({
           Eligible for Processing
         </div>
 
-        <h3 className="mt-4 text-xl font-bold text-foreground">
-          Estimate for{" "}
-          <span className="text-primary">
-            {country.flag} {country.name}
+        <div className="mt-4 flex items-center gap-3">
+          <span className="flex h-9 w-12 items-center justify-center overflow-hidden rounded-md border border-border shadow-sm">
+            <Flag code={country.code} title={country.name} />
           </span>
-        </h3>
-        <p className="mt-1 text-sm text-muted-foreground">{doc}</p>
+          <div>
+            <h3 className="text-xl font-bold leading-tight text-foreground">
+              Tailored Plan for{" "}
+              <span className="text-primary">{country.name}</span>
+            </h3>
+            <p className="text-sm text-muted-foreground">{doc}</p>
+          </div>
+        </div>
 
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
-          <TimelineCard icon={<Clock />} label="MOFA Processing" value="48 Hours" tone="primary" />
+          <TimelineCard icon={<Clock />} label="MOFA Processing" value="~48 Hours" tone="primary" />
           <TimelineCard
             icon={<Clock />}
             label={`${country.name} Embassy`}
@@ -179,52 +210,34 @@ function EstimateModal({
           />
         </div>
 
-        {!submitted ? (
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              setSubmitted(true);
-            }}
-            className="mt-6 space-y-3"
-          >
-            <input
-              required
-              type="text"
-              placeholder="Full name"
-              className="w-full rounded-lg border border-input bg-background px-3.5 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
-            />
-            <input
-              required
-              type="tel"
-              placeholder="WhatsApp number (+977…)"
-              className="w-full rounded-lg border border-input bg-background px-3.5 py-2.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
-            />
-            <button className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary py-3 text-sm font-semibold text-primary-foreground shadow-elegant transition-all hover:bg-primary/92">
-              Reserve My Slot <ArrowRight className="h-4 w-4" />
-            </button>
-            <p className="text-center text-[11px] text-muted-foreground">
-              We reply within 3 minutes during working hours.
-            </p>
-          </form>
-        ) : (
-          <div className="mt-6 flex flex-col items-center gap-3 rounded-lg border border-success/20 bg-success/5 p-6 text-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-success/15 text-success">
-              <CheckCircle2 className="h-6 w-6" />
-            </div>
-            <h4 className="text-base font-semibold text-foreground">Request filed successfully</h4>
-            <p className="text-xs text-muted-foreground">
-              Fast-track this to our active desk now.
-            </p>
-            <a
-              href="https://wa.me/9771000000000"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-lg bg-success px-4 py-2.5 text-sm font-semibold text-success-foreground"
-            >
-              <Loader2 className="h-4 w-4" /> Continue on WhatsApp
-            </a>
+        <div className="mt-5 rounded-xl border border-border bg-[var(--surface)] p-4">
+          <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-foreground/70">
+            <ClipboardList className="h-3.5 w-3.5 text-primary" />
+            Required Documents
           </div>
-        )}
+          <ul className="mt-2.5 space-y-1.5">
+            {requirements.map((r) => (
+              <li key={r} className="flex items-start gap-2 text-sm text-foreground">
+                <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-success" />
+                {r}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <a
+          href={waUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="group mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-success px-4 py-3.5 text-sm font-semibold text-success-foreground shadow-elegant transition-all hover:-translate-y-0.5 hover:bg-success/92"
+        >
+          <MessageCircle className="h-4 w-4" />
+          Connect with {country.name} Specialist via WhatsApp
+          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+        </a>
+        <p className="mt-2 text-center text-[11px] text-muted-foreground">
+          Your document &amp; destination details are pre-filled — reply time under 3 min.
+        </p>
       </div>
     </div>
   );
