@@ -117,7 +117,7 @@ function ServicePage() {
             <div>
               <h2 className="text-xl font-semibold text-foreground">What's included</h2>
               <ul className="mt-5 space-y-3">
-                {service.highlights.map((h) => (
+                {service.highlights.map((h: string) => (
                   <li key={h} className="flex items-start gap-3 rounded-xl border border-border bg-card p-4 shadow-elegant">
                     <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-success" />
                     <span className="text-sm text-foreground">{h}</span>
