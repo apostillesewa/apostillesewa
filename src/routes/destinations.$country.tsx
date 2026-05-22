@@ -31,14 +31,18 @@ export const Route = createFileRoute("/destinations/$country")({
     if (!country) throw notFound();
     return { country };
   },
-  head: ({ loaderData }) => ({
+  head: ({ loaderData, params }) => ({
     meta: [
       { title: `Apostille & Embassy Legalization for ${loaderData?.country.name} in Nepal` },
       {
         name: "description",
         content: `Step-by-step MOFA, notary, and embassy legalization for ${loaderData?.country.name}. Trusted by Nepali applicants for work and student visas.`,
       },
+      { property: "og:title", content: `${loaderData?.country.name} Document Legalization — Apostille Sewa` },
+      { property: "og:description", content: `Step-by-step MOFA + embassy legalization for ${loaderData?.country.name}.` },
+      { property: "og:url", content: `${SITE_URL}/destinations/${params.country}` },
     ],
+    links: [{ rel: "canonical", href: `${SITE_URL}/destinations/${params.country}` }],
   }),
   component: CountryPage,
 });
