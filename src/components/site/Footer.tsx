@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import { ShieldCheck, Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
+import { LogoMark } from "./Logo";
+import { PHONE_DISPLAY, PHONE_E164, EMAIL, ADDRESS_LINE } from "@/lib/contact";
 
 export function Footer() {
   return (
@@ -7,12 +9,10 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-14">
         <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
-            <Link to="/" className="flex items-center gap-2.5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                <ShieldCheck className="h-5 w-5" />
-              </span>
-              <span className="text-base font-bold tracking-tight">
-                Apostille<span className="text-primary"> Sewa</span>
+            <Link to="/" className="flex items-center gap-2.5" aria-label="Apostille Sewa — Home">
+              <LogoMark className="h-9 w-9" />
+              <span className="text-base font-extrabold tracking-tight">
+                Apostille<span className="font-normal text-primary"> Sewa</span>
               </span>
             </Link>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
@@ -23,18 +23,45 @@ export function Footer() {
 
           <FooterCol
             title="Services"
-            items={["MOFA Attestation", "Embassy Legalization", "Apostille", "PCC Authentication"]}
+            items={[
+              { label: "MOFA Attestation", to: "/services/mofa-attestation" },
+              { label: "Embassy Legalization", to: "/services/embassy-legalization" },
+              { label: "PCC Authentication", to: "/services/pcc-authentication" },
+              { label: "Document Verification", to: "/services/document-verification" },
+            ]}
           />
           <FooterCol
             title="Destinations"
-            items={["Poland", "Germany", "Croatia", "Malta", "Portugal", "Cyprus"]}
+            items={[
+              { label: "Poland", to: "/destinations/poland" },
+              { label: "Germany", to: "/destinations/germany" },
+              { label: "Croatia", to: "/destinations/croatia" },
+              { label: "Malta", to: "/destinations/malta" },
+              { label: "Portugal", to: "/destinations/portugal" },
+              { label: "Cyprus", to: "/destinations/cyprus" },
+            ]}
           />
           <div>
             <h4 className="text-xs font-semibold uppercase tracking-wider text-foreground">Contact</h4>
             <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
-              <li className="flex items-center gap-2"><MapPin className="h-3.5 w-3.5" /> Kathmandu Hub, Nepal</li>
-              <li className="flex items-center gap-2"><Phone className="h-3.5 w-3.5" /> +977 1 000 0000</li>
-              <li className="flex items-center gap-2"><Mail className="h-3.5 w-3.5" /> hello@apostillesewa.com</li>
+              <li className="flex items-center gap-2">
+                <MapPin className="h-3.5 w-3.5" /> {ADDRESS_LINE}
+              </li>
+              <li>
+                <a href={`tel:${PHONE_E164}`} className="flex items-center gap-2 hover:text-foreground">
+                  <Phone className="h-3.5 w-3.5" /> {PHONE_DISPLAY}
+                </a>
+              </li>
+              <li>
+                <a href={`mailto:${EMAIL}`} className="flex items-center gap-2 hover:text-foreground">
+                  <Mail className="h-3.5 w-3.5" /> {EMAIL}
+                </a>
+              </li>
+              <li>
+                <Link to="/contact-us" className="inline-flex font-semibold text-primary hover:underline">
+                  Visit Contact Page →
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
@@ -48,13 +75,17 @@ export function Footer() {
   );
 }
 
-function FooterCol({ title, items }: { title: string; items: string[] }) {
+function FooterCol({ title, items }: { title: string; items: { label: string; to: string }[] }) {
   return (
     <div>
       <h4 className="text-xs font-semibold uppercase tracking-wider text-foreground">{title}</h4>
       <ul className="mt-4 space-y-2.5 text-sm text-muted-foreground">
         {items.map((i) => (
-          <li key={i}><a href="#" className="hover:text-foreground">{i}</a></li>
+          <li key={i.to}>
+            <Link to={i.to} className="hover:text-foreground">
+              {i.label}
+            </Link>
+          </li>
         ))}
       </ul>
     </div>
