@@ -48,7 +48,7 @@ const REQUIREMENTS: Record<string, string[]> = {
   ],
 };
 
-const WHATSAPP_NUMBER = "9771000000000";
+import { WHATSAPP_NUMBER } from "@/lib/contact";
 
 export function PathFinder() {
   const [doc, setDoc] = useState("");
@@ -66,7 +66,7 @@ export function PathFinder() {
         </div>
 
         <h3 className="text-lg font-semibold text-foreground">
-          Instant Price &amp; Timeline Estimate
+          Instant Timeline &amp; Requirements
         </h3>
         <p className="mt-1 text-sm text-muted-foreground">
           Two steps. No commitment. Zero guesswork.
@@ -104,7 +104,7 @@ export function PathFinder() {
             onClick={() => setOpen(true)}
             className="group flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3.5 text-sm font-semibold text-primary-foreground shadow-elegant transition-all hover:bg-primary/92 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
           >
-            Get Price &amp; Timeline Instantly
+            See Timeline &amp; Requirements
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
           </button>
 
@@ -161,7 +161,7 @@ function EstimateModal({
   const requirements = REQUIREMENTS[doc] ?? [];
 
   const message = encodeURIComponent(
-    `Hi Apostille Sewa, I'd like to fast-track my legalization request.\n\n• Document: ${doc}\n• Destination: ${country.name}\n• Expected turnaround: 48 hrs MOFA + ${country.embassyDays} Embassy\n\nPlease share the next steps.`,
+    `Hi Apostille Sewa, I'd like the latest pricing & timeline for my legalization request.\n\n• Document: ${doc}\n• Destination: ${country.name}\n• Expected turnaround: 48 hrs MOFA + ${country.embassyDays} Embassy\n\nPlease share the current rate and next steps.`,
   );
   const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
 
@@ -225,14 +225,19 @@ function EstimateModal({
           </ul>
         </div>
 
+        <div className="mt-5 rounded-xl border border-primary/15 bg-primary/5 p-4 text-xs leading-relaxed text-foreground/80">
+          <strong className="text-foreground">Contact Us for Latest Pricing</strong> — rates fluctuate
+          frequently based on Delhi transit schedules and changing official embassy fee mandates.
+        </div>
+
         <a
           href={waUrl}
           target="_blank"
           rel="noreferrer"
-          className="group mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-success px-4 py-3.5 text-sm font-semibold text-success-foreground shadow-elegant transition-all hover:-translate-y-0.5 hover:bg-success/92"
+          className="group mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-success px-4 py-3.5 text-sm font-semibold text-success-foreground shadow-elegant transition-all hover:-translate-y-0.5 hover:bg-success/92"
         >
           <MessageCircle className="h-4 w-4" />
-          Connect with {country.name} Specialist via WhatsApp
+          Request Instant Pricing Quote via WhatsApp
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
         </a>
         <p className="mt-2 text-center text-[11px] text-muted-foreground">

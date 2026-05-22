@@ -14,7 +14,7 @@ const DOC_TYPES = [
   "Commercial Invoice",
 ];
 
-const WHATSAPP_NUMBER = "9771000000000";
+import { WHATSAPP_NUMBER, SITE_URL } from "@/lib/contact";
 
 const CHECKLIST: Record<string, { step: string; detail: string; icon: typeof Stamp }[]> = {
   default: [
@@ -126,12 +126,17 @@ function CountryPage() {
                     <div className="mt-3 text-3xl font-bold text-foreground">9–12 Days</div>
                     <p className="text-xs text-muted-foreground">End-to-end from notary to embassy</p>
 
+                    <div className="mt-4 rounded-lg border border-primary/15 bg-primary/5 p-3 text-[11px] leading-relaxed text-foreground/80">
+                      <strong className="text-foreground">Contact us for latest pricing</strong> —
+                      rates fluctuate based on Delhi transit schedules and changing embassy fee mandates.
+                    </div>
+
                     <form
                       onSubmit={(e) => {
                         e.preventDefault();
                         setSubmitted(true);
                       }}
-                      className="mt-6 space-y-3"
+                      className="mt-5 space-y-3"
                     >
                       <input
                         required
@@ -166,8 +171,9 @@ function CountryPage() {
                         <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                       </div>
 
-                      <button className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary py-3 text-sm font-semibold text-primary-foreground shadow-elegant transition-all hover:-translate-y-0.5 hover:bg-primary/92">
-                        Reserve My {country.name} Slot <ArrowRight className="h-4 w-4" />
+                      <button className="flex w-full items-center justify-center gap-2 rounded-lg bg-success py-3 text-sm font-semibold text-success-foreground shadow-elegant transition-all hover:-translate-y-0.5 hover:bg-success/92">
+                        <MessageCircle className="h-4 w-4" />
+                        Request Instant Pricing Quote via WhatsApp
                       </button>
                       <p className="flex items-center justify-center gap-1 text-center text-[11px] text-muted-foreground">
                         <Send className="h-3 w-3" /> Routed to {country.name} desk within 3 minutes

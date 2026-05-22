@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { Upload, X, FileCheck2, ShieldCheck, MessageCircle, CheckCircle2, ArrowRight } from "lucide-react";
 
-const WHATSAPP_NUMBER = "9771000000000";
+import { WHATSAPP_NUMBER } from "@/lib/contact";
 
 export function ScreeningCTA() {
   const [open, setOpen] = useState(false);
