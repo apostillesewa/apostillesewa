@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { MessageCircle, X } from "lucide-react";
+import { WHATSAPP_BASE } from "@/lib/contact";
 
 export function FloatingWhatsApp() {
   const [open, setOpen] = useState(true);
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex items-end gap-3">
+    <div className="fixed bottom-20 right-6 z-50 flex items-end gap-3 lg:bottom-6">
       {open && (
         <div className="hidden max-w-xs animate-fade-in items-start gap-3 rounded-2xl border border-border bg-card p-4 shadow-card sm:flex">
           <button
@@ -24,7 +25,7 @@ export function FloatingWhatsApp() {
         </div>
       )}
       <a
-        href="https://wa.me/9771000000000"
+        href={WHATSAPP_BASE}
         target="_blank"
         rel="noreferrer"
         className="relative flex h-14 w-14 items-center justify-center rounded-full bg-success text-success-foreground shadow-card transition-transform hover:scale-105 animate-pulse-dot"

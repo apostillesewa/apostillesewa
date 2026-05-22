@@ -106,7 +106,7 @@ function AboutPage() {
                 Our commitment
               </h3>
               <ul className="mt-4 space-y-3 text-sm text-foreground">
-                <Bullet>Transparent flat pricing — published per country, no surprises.</Bullet>
+                <Bullet>Live pricing on request — rates updated against current embassy fees.</Bullet>
                 <Bullet>Named caseworker for every file, reachable on WhatsApp.</Bullet>
                 <Bullet>Free re-submission if a document is rejected on our handling.</Bullet>
                 <Bullet>Auto-deletion of uploaded files within 24 hours of review.</Bullet>
