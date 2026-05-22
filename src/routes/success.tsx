@@ -3,6 +3,7 @@ import { CheckCircle2, ArrowRight, MessageCircle, Home } from "lucide-react";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { FloatingWhatsApp } from "@/components/site/FloatingWhatsApp";
+import { WHATSAPP_BASE } from "@/lib/contact";
 
 export const Route = createFileRoute("/success")({
   head: () => ({
@@ -35,7 +36,7 @@ function SuccessPage() {
           </p>
 
           <a
-            href="https://wa.me/9771000000000"
+            href={WHATSAPP_BASE}
             target="_blank"
             rel="noreferrer"
             className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-success px-5 py-3.5 text-sm font-semibold text-success-foreground shadow-elegant transition-transform hover:-translate-y-0.5"

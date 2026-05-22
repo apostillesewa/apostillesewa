@@ -9,6 +9,7 @@ import { Destinations } from "@/components/site/Destinations";
 import { SocialProof } from "@/components/site/SocialProof";
 import { ScreeningCTA } from "@/components/site/ScreeningCTA";
 import { Footer } from "@/components/site/Footer";
+import { MobileTabBar } from "@/components/site/MobileTabBar";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -33,7 +34,7 @@ function Index() {
   }, [hash]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-16 lg:pb-0">
 
       <Header />
       <main>
@@ -46,6 +47,7 @@ function Index() {
       </main>
       <Footer />
       <FloatingWhatsApp />
+      <MobileTabBar />
     </div>
   );
 }
