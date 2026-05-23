@@ -172,6 +172,7 @@ function ContactForm() {
   const [destination, setDestination] = useState("");
   const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [busy, setBusy] = useState(false);
 
   const valid = name.trim().length > 1 && phone.trim().length > 5;
 
@@ -204,9 +205,18 @@ function ContactForm() {
 
   return (
     <form
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
-        if (!valid) return;
+        if (!valid || busy) return;
+        setBusy(true);
+        try {
+          await submitInquiry({
+            data: { name, phone, country: destination, message, source: "contact" },
+          });
+        } catch {
+          /* still allow WhatsApp fallback */
+        }
+        setBusy(false);
         setSubmitted(true);
       }}
       className="space-y-4 rounded-2xl border border-border bg-card p-6 shadow-card sm:p-8"
