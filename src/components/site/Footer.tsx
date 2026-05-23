@@ -1,7 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { useState } from "react";
+import { Mail, Phone, MapPin, CheckCircle2, Loader2, ArrowRight } from "lucide-react";
 import { LogoMark } from "./Logo";
 import { PHONE_DISPLAY, PHONE_E164, EMAIL, ADDRESS_LINE } from "@/lib/contact";
+import { subscribeNewsletter } from "@/lib/newsletter.functions";
 
 export function Footer() {
   return (
@@ -19,6 +21,7 @@ export function Footer() {
               Nepal's specialized document legalization and embassy verification service for
               individuals moving to Europe for work or study.
             </p>
+            <NewsletterForm />
           </div>
 
           <FooterCol
@@ -62,6 +65,9 @@ export function Footer() {
                   Visit Contact Page →
                 </Link>
               </li>
+              <li>
+                <Link to="/blog" className="inline-flex hover:text-foreground">Insights</Link>
+              </li>
             </ul>
           </div>
         </div>
@@ -72,6 +78,56 @@ export function Footer() {
         </div>
       </div>
     </footer>
+  );
+}
+
+function NewsletterForm() {
+  const [email, setEmail] = useState("");
+  const [state, setState] = useState<"idle" | "busy" | "ok" | "err">("idle");
+
+  return (
+    <form
+      onSubmit={async (e) => {
+        e.preventDefault();
+        if (state === "busy") return;
+        setState("busy");
+        try {
+          await subscribeNewsletter({ data: { email } });
+          setState("ok");
+        } catch {
+          setState("err");
+        }
+      }}
+      className="mt-5 max-w-sm"
+    >
+      <label className="block text-[11px] font-semibold uppercase tracking-wider text-foreground">
+        Embassy updates in your inbox
+      </label>
+      {state === "ok" ? (
+        <p className="mt-2 inline-flex items-center gap-1.5 rounded-md bg-success/10 px-2.5 py-1.5 text-xs text-success">
+          <CheckCircle2 className="h-3.5 w-3.5" /> Subscribed — thank you.
+        </p>
+      ) : (
+        <div className="mt-2 flex gap-2">
+          <input
+            required
+            type="email"
+            maxLength={255}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="you@example.com"
+            className="flex-1 rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
+          />
+          <button
+            disabled={state === "busy"}
+            className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:-translate-y-0.5 transition-all disabled:opacity-60"
+          >
+            {state === "busy" ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <ArrowRight className="h-3.5 w-3.5" />}
+          </button>
+        </div>
+      )}
+      {state === "err" && <p className="mt-1 text-[11px] text-destructive">Couldn't subscribe. Try again.</p>}
+    </form>
   );
 }
 
