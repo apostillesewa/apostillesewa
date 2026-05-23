@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { Upload, X, FileCheck2, ShieldCheck, MessageCircle, CheckCircle2, ArrowRight } from "lucide-react";
 
 import { WHATSAPP_NUMBER } from "@/lib/contact";
+import { submitInquiry } from "@/lib/inquiries.functions";
 
 export function ScreeningCTA() {
   const [open, setOpen] = useState(false);
@@ -74,8 +75,15 @@ function UploadModal({ onClose }: { onClose: () => void }) {
             </p>
 
             <form
-              onSubmit={(e) => {
+              onSubmit={async (e) => {
                 e.preventDefault();
+                try {
+                  await submitInquiry({
+                    data: { name, phone, message: `Screening upload: ${file?.name ?? "(file)"}`, source: "screening" },
+                  });
+                } catch {
+                  /* ignore — still proceed to WhatsApp */
+                }
                 setSubmitted(true);
               }}
               className="mt-5 space-y-4"
