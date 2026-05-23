@@ -24,6 +24,7 @@ import {
   SITE_URL,
   buildWhatsAppUrl,
 } from "@/lib/contact";
+import { submitInquiry } from "@/lib/inquiries.functions";
 
 const DESTINATIONS = ["Poland", "Germany", "Croatia", "Malta", "Portugal", "Cyprus", "Czech Republic", "Other / Undecided"];
 
