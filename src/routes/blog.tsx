@@ -65,37 +65,34 @@ function BlogIndex() {
                   key={p.id}
                   to="/blog/$slug"
                   params={{ slug: p.slug }}
-                  className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-elegant transition-all hover:-translate-y-1 hover:border-primary/30"
+                  className="group flex flex-col rounded-2xl border border-border bg-card p-6 shadow-elegant transition-all hover:-translate-y-1"
+                  style={{ borderColor: "rgba(17,24,39,0.08)" }}
                 >
-                  {p.cover_image_url ? (
-                    <img
-                      src={p.cover_image_url}
-                      alt={p.title}
-                      loading="lazy"
-                      className="aspect-video w-full object-cover"
-                    />
-                  ) : (
-                    <div className="aspect-video w-full bg-gradient-to-br from-primary/8 to-primary/2" />
+                  {p.category && (
+                    <span
+                      className="inline-flex w-fit items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
+                      style={{ backgroundColor: "rgba(26,92,255,0.1)", color: "#1A5CFF" }}
+                    >
+                      <Tag className="h-2.5 w-2.5" /> {p.category}
+                    </span>
                   )}
-                  <div className="flex flex-1 flex-col p-5">
-                    {p.category && (
-                      <span className="inline-flex w-fit items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary">
-                        <Tag className="h-2.5 w-2.5" /> {p.category}
-                      </span>
-                    )}
-                    <h2 className="mt-3 text-base font-bold text-foreground transition-colors group-hover:text-primary">
-                      {p.title}
-                    </h2>
-                    {p.excerpt && <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">{p.excerpt}</p>}
-                    <div className="mt-4 flex items-center justify-between border-t border-border pt-3 text-[11px] text-muted-foreground">
-                      <span className="inline-flex items-center gap-1">
-                        <Calendar className="h-3 w-3" />
-                        {p.published_at ? new Date(p.published_at).toLocaleDateString() : ""}
-                      </span>
-                      <span className="inline-flex items-center gap-1 font-semibold text-primary">
-                        Read <ArrowRight className="h-3 w-3" />
-                      </span>
-                    </div>
+                  <h2
+                    className="mt-3 text-lg font-bold leading-snug transition-colors group-hover:text-[#1A5CFF]"
+                    style={{ color: "#111827" }}
+                  >
+                    {p.title}
+                  </h2>
+                  {p.excerpt && (
+                    <p className="mt-2 line-clamp-3 text-sm text-muted-foreground">{p.excerpt}</p>
+                  )}
+                  <div className="mt-5 flex items-center justify-between border-t border-border pt-3 text-[11px] text-muted-foreground">
+                    <span className="inline-flex items-center gap-1">
+                      <Calendar className="h-3 w-3" />
+                      {p.published_at ? new Date(p.published_at).toLocaleDateString() : ""}
+                    </span>
+                    <span className="inline-flex items-center gap-1 font-semibold" style={{ color: "#1A5CFF" }}>
+                      Read article <ArrowRight className="h-3 w-3" />
+                    </span>
                   </div>
                 </Link>
               ))}
