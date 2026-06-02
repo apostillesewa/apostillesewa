@@ -9,7 +9,7 @@ import { BookOpen, ArrowRight, Calendar, Tag } from "lucide-react";
 import { SITE_URL } from "@/lib/contact";
 import { listPublishedPosts } from "@/lib/blog.functions";
 
-export const Route = createFileRoute("/blog")({
+export const Route = createFileRoute("/blog/")({
   head: () => ({
     meta: [
       { title: "Insights — Apostille Sewa Blog" },
