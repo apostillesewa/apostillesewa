@@ -1,6 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { marked } from "marked";
-import DOMPurify from "dompurify";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { FloatingWhatsApp } from "@/components/site/FloatingWhatsApp";
@@ -54,9 +53,7 @@ export const Route = createFileRoute("/blog/$slug")({
 });
 
 function renderMarkdown(md: string): string {
-  const raw = marked.parse(md ?? "", { async: false, gfm: true, breaks: true }) as string;
-  if (typeof window === "undefined") return raw;
-  return DOMPurify.sanitize(raw);
+  return marked.parse(md ?? "", { async: false, gfm: true, breaks: true }) as string;
 }
 
 function PostPage() {
