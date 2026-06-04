@@ -54,7 +54,8 @@ export const Route = createFileRoute("/blog/$slug")({
 });
 
 function renderMarkdown(md: string): string {
-  return marked.parse(md ?? "", { async: false, gfm: true, breaks: true }) as string;
+  const raw = marked.parse(md ?? "", { async: false, gfm: true, breaks: true }) as string;
+  return DOMPurify.sanitize(raw);
 }
 
 function PostPage() {
