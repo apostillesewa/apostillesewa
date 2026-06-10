@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { COUNTRIES } from "@/components/site/Destinations";
 
-const BASE_URL = "https://apostillesewa.lovable.app";
+const BASE_URL = "https://apostillesewa.com";
 
 const SERVICE_SLUGS = [
   "mofa-attestation",
