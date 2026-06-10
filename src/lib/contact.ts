@@ -14,4 +14,4 @@ export function buildWhatsAppUrl(message: string) {
 export const OFFICE_HOURS = "Kathmandu Hub Open: Sun–Fri, 9 AM – 6 PM";
 export const ADDRESS_LINE = "Kathmandu Hub, Nepal";
 
-export const SITE_URL = "https://apostillesewa.lovable.app";
+export const SITE_URL = "https://apostillesewa.com";
