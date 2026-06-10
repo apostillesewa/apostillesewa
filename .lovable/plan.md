@@ -1,28 +1,49 @@
-## Update site URL to https://apostillesewa.com
+# Fix custom domain auth on apostillesewa.com
 
-Switch the canonical site URL from `apostillesewa.lovable.app` to `apostillesewa.com` everywhere it's hard-coded. `www.apostillesewa.com` will redirect to the apex via Cloudflare/DNS (recommended) so the app uses one canonical host for SEO and OAuth.
+## What's actually wrong
 
-### Files to update
+Your code is already pointed at `https://apostillesewa.com` (verified in `src/lib/contact.ts`, `src/routes/sitemap[.]xml.ts`, `src/routes/__root.tsx`, `public/robots.txt`). The login flow also uses `window.location.origin`, so it auto-adapts to whichever host the user is on.
 
-1. **`src/lib/contact.ts`** — `SITE_URL = "https://apostillesewa.com"` (consumed by blog, services, destinations, contact-us routes for canonical + og:url).
-2. **`src/routes/sitemap[.]xml.ts`** — `BASE_URL = "https://apostillesewa.com"`.
-3. **`public/robots.txt`** — `Sitemap: https://apostillesewa.com/sitemap.xml`.
-4. **`src/routes/__root.tsx`** — JSON-LD `Organization` `url` and `logo` → `https://apostillesewa.com` / `https://apostillesewa.com/logo.svg`.
-5. **`src/routes/login.tsx`** — leave `emailRedirectTo: window.location.origin + "/admin"` as-is (it auto-uses the current origin, so it already works on the custom domain). No change needed.
+The blogs not loading and "No admin access" on `https://apostillesewa.com` are **not** code bugs. They happen because the backend Auth config still only trusts the `lovable.app` host:
 
-### Supabase Auth config (manual, in Lovable Cloud)
+- **Site URL** is set to `https://apostillesewa.lovable.app`
+- **Redirect URLs** allowlist does not include `https://apostillesewa.com`
 
-Code uses `window.location.origin` for the email redirect, so no code change is required. But Supabase only honors redirect URLs on its allow-list. Add these in Cloud → Users → Auth Settings → URL Configuration:
+So when you visit `https://apostillesewa.com/admin`:
+- the OAuth/email-link redirect targets are rejected as untrusted, the session never lands, `auth.uid()` is `null`, and the `has_role(...)` check returns false → "No admin access"
+- any RLS-protected reads (blogs, admin lists) return empty
 
-- **Site URL**: `https://apostillesewa.com`
-- **Additional Redirect URLs**:
-  - `https://apostillesewa.com/**`
-  - `https://www.apostillesewa.com/**`
-  - `https://apostillesewa.lovable.app/**` (keep for Lovable preview)
-  - `http://localhost:*/**` (local dev)
+No code changes are needed. The fix is purely a backend Auth settings update.
 
-I'll remind you of this after the code change — it cannot be set from code.
+## About the "external Supabase dashboard"
 
-### DNS recommendation
+This project runs on **Lovable Cloud**. There is no separate Supabase account, no separate dashboard, and no external login URL to give you — your Supabase credentials don't exist because you never created a Supabase account. Everything is managed inside Lovable.
 
-Point `www.apostillesewa.com` to the same Worker and add a redirect rule `www → apex` in Cloudflare (Rules → Redirect Rules → 301 to `https://apostillesewa.com/$1`). One canonical host avoids duplicate-content SEO issues.
+## Exact steps to fix (do these in Lovable, not Supabase)
+
+1. In the editor's top nav, open the **More** tab → **Cloud**.
+2. In the Cloud sidebar, click **Users**.
+3. Click the **Auth Settings** gear icon.
+4. Open **URL Configuration**.
+5. Set:
+   - **Site URL**: `https://apostillesewa.com`
+   - **Redirect URLs** (add all of these):
+     - `https://apostillesewa.com/**`
+     - `https://www.apostillesewa.com/**`
+     - `https://apostillesewa.lovable.app/**` (keep so the old preview still works)
+     - `https://id-preview--bd54f8c4-0fb0-48ab-9692-8bc191248603.lovable.app/**` (Lovable preview)
+     - `http://localhost:*/**` (local dev)
+6. **Save**.
+7. Sign out of `https://apostillesewa.com`, hard-refresh, sign back in. Then check `/admin` and the blog list.
+
+## Cloudflare side (recommended, optional)
+
+Add a 301 redirect rule in Cloudflare from `www.apostillesewa.com` → `https://apostillesewa.com/$1` so there is one canonical host and only one Site URL to worry about.
+
+## Code changes in this plan
+
+None. Code is already correct.
+
+<presentation-actions>
+<presentation-open-backend>View Backend</presentation-open-backend>
+</presentation-actions>
