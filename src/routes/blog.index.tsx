@@ -7,7 +7,7 @@ import { FloatingWhatsApp } from "@/components/site/FloatingWhatsApp";
 import { MobileTabBar } from "@/components/site/MobileTabBar";
 import { BookOpen, ArrowRight, Calendar, Tag } from "lucide-react";
 import { SITE_URL } from "@/lib/contact";
-import { listPublishedPosts } from "@/lib/blog.functions";
+import { listPublishedPosts } from "@/lib/github-blog.functions";
 
 export const Route = createFileRoute("/blog/")({
   head: () => ({
