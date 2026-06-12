@@ -7,7 +7,7 @@ import { FloatingWhatsApp } from "@/components/site/FloatingWhatsApp";
 import { MobileTabBar } from "@/components/site/MobileTabBar";
 import { BookOpen, ArrowRight, Calendar, Tag } from "lucide-react";
 import { SITE_URL } from "@/lib/contact";
-import { listPublishedPosts } from "@/lib/blog.functions";
+import { listPublishedPosts } from "@/lib/github-blog.functions";
 
 export const Route = createFileRoute("/blog/")({
   head: () => ({
@@ -62,7 +62,7 @@ function BlogIndex() {
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {posts.map((p) => (
                 <Link
-                  key={p.id}
+                  key={p.slug}
                   to="/blog/$slug"
                   params={{ slug: p.slug }}
                   className="group flex flex-col rounded-2xl border border-border bg-card p-6 shadow-elegant transition-all hover:-translate-y-1"
@@ -88,7 +88,7 @@ function BlogIndex() {
                   <div className="mt-5 flex items-center justify-between border-t border-border pt-3 text-[11px] text-muted-foreground">
                     <span className="inline-flex items-center gap-1">
                       <Calendar className="h-3 w-3" />
-                      {p.published_at ? new Date(p.published_at).toLocaleDateString() : ""}
+                      {p.date ? new Date(p.date).toLocaleDateString() : ""}
                     </span>
                     <span className="inline-flex items-center gap-1 font-semibold" style={{ color: "#1A5CFF" }}>
                       Read article <ArrowRight className="h-3 w-3" />

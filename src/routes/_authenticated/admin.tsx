@@ -9,7 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { getMyRoles } from "@/lib/auth.functions";
 import {
   listAllPostsAdmin, getPostAdmin, upsertPost, deletePost,
-} from "@/lib/blog.functions";
+} from "@/lib/github-blog.functions";
 import { listInquiries, updateInquiryStatus } from "@/lib/inquiries.functions";
 import { listSubscribers } from "@/lib/newsletter.functions";
 import { LogoMark } from "@/components/site/Logo";

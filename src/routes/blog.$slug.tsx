@@ -7,7 +7,7 @@ import { FloatingWhatsApp } from "@/components/site/FloatingWhatsApp";
 import { MobileTabBar } from "@/components/site/MobileTabBar";
 import { ArrowLeft, Calendar, Tag } from "lucide-react";
 import { SITE_URL } from "@/lib/contact";
-import { getPublishedPost } from "@/lib/blog.functions";
+import { getPublishedPost } from "@/lib/github-blog.functions";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ params }) => {
@@ -79,9 +79,9 @@ function PostPage() {
               <Tag className="h-2.5 w-2.5" /> {post.category}
             </span>
           )}
-          {post.published_at && (
+          {post.date && (
             <span className="inline-flex items-center gap-1">
-              <Calendar className="h-3 w-3" /> {new Date(post.published_at).toLocaleDateString()}
+              <Calendar className="h-3 w-3" /> {new Date(post.date).toLocaleDateString()}
             </span>
           )}
         </div>
