@@ -7,7 +7,7 @@ import { FloatingWhatsApp } from "@/components/site/FloatingWhatsApp";
 import { MobileTabBar } from "@/components/site/MobileTabBar";
 import { ArrowLeft, Calendar, Tag } from "lucide-react";
 import { SITE_URL } from "@/lib/contact";
-import { getPublishedPost } from "@/lib/blog.functions";
+import { getPublishedPost } from "@/lib/github-blog.functions";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ params }) => {
