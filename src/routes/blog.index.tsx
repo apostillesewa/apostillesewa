@@ -62,7 +62,7 @@ function BlogIndex() {
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {posts.map((p) => (
                 <Link
-                  key={p.id}
+                  key={p.slug}
                   to="/blog/$slug"
                   params={{ slug: p.slug }}
                   className="group flex flex-col rounded-2xl border border-border bg-card p-6 shadow-elegant transition-all hover:-translate-y-1"
