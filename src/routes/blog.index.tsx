@@ -88,7 +88,7 @@ function BlogIndex() {
                   <div className="mt-5 flex items-center justify-between border-t border-border pt-3 text-[11px] text-muted-foreground">
                     <span className="inline-flex items-center gap-1">
                       <Calendar className="h-3 w-3" />
-                      {p.published_at ? new Date(p.published_at).toLocaleDateString() : ""}
+                      {p.date ? new Date(p.date).toLocaleDateString() : ""}
                     </span>
                     <span className="inline-flex items-center gap-1 font-semibold" style={{ color: "#1A5CFF" }}>
                       Read article <ArrowRight className="h-3 w-3" />
