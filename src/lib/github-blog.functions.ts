@@ -225,31 +225,40 @@ export const upsertPost = createServerFn({ method: "POST" })
     // Slug change → delete the old file after writing the new one.
     const renamedFrom = data.id && data.id !== data.slug ? data.id : null;
 
-    await octokit.repos.createOrUpdateFileContents({
-      owner,
-      repo,
-      branch,
-      path: `${dir}/${data.slug}.md`,
-      message: `chore(blog): ${existing ? "update" : "create"} "${data.title}"`,
-      content: toBase64(md),
-      sha: existing?.sha,
-      committer: { name: "Apostille Sewa Admin", email: "admin@apostillesewa.com" },
-      author: { name: "Apostille Sewa Admin", email: "admin@apostillesewa.com" },
-    });
+    try {
+      await octokit.repos.createOrUpdateFileContents({
+        owner,
+        repo,
+        branch,
+        path: `${dir}/${data.slug}.md`,
+        message: `chore(blog): ${existing ? "update" : "create"} "${data.title}"`,
+        content: toBase64(md),
+        sha: existing?.sha,
+        committer: { name: "Apostille Sewa Admin", email: "admin@apostillesewa.com" },
+        author: { name: "Apostille Sewa Admin", email: "admin@apostillesewa.com" },
+      });
+    } catch (e) {
+      throw ghError(`createOrUpdateFileContents(${dir}/${data.slug}.md)`, e);
+    }
 
     if (renamedFrom) {
       const old = await ghGetFile(renamedFrom);
       if (old) {
-        await octokit.repos.deleteFile({
-          owner,
-          repo,
-          branch,
-          path: `${dir}/${renamedFrom}.md`,
-          message: `chore(blog): rename ${renamedFrom} → ${data.slug}`,
-          sha: old.sha,
-        });
+        try {
+          await octokit.repos.deleteFile({
+            owner,
+            repo,
+            branch,
+            path: `${dir}/${renamedFrom}.md`,
+            message: `chore(blog): rename ${renamedFrom} → ${data.slug}`,
+            sha: old.sha,
+          });
+        } catch (e) {
+          throw ghError(`deleteFile(${dir}/${renamedFrom}.md)`, e);
+        }
       }
     }
+
 
     return { id: data.slug };
   });
