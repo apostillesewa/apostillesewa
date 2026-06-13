@@ -84,7 +84,7 @@ async function ghGetFile(slug: string): Promise<{ raw: string; sha: string } | n
   } catch (e) {
     const status = (e as { status?: number }).status;
     if (status === 404) return null;
-    throw e;
+    throw ghError(`getContent(${slug}.md)`, e);
   }
 }
 
@@ -100,9 +100,10 @@ async function ghListFiles(): Promise<{ slug: string; sha: string }[]> {
   } catch (e) {
     const status = (e as { status?: number }).status;
     if (status === 404) return []; // folder doesn't exist yet
-    throw e;
+    throw ghError(`listContents(${dir})`, e);
   }
 }
+
 
 function toBase64(s: string): string {
   // Workers + Node both support btoa via the Web standard; use TextEncoder for safety.
