@@ -56,7 +56,7 @@ function BlogIndex() {
             <EmptyState />
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {posts.map((p) => (
+              {posts.map((p: (typeof posts)[number]) => (
                 <Link
                   key={p.slug}
                   to="/blog/$slug"
