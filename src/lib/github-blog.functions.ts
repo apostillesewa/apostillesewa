@@ -274,13 +274,18 @@ export const deletePost = createServerFn({ method: "POST" })
     const octokit = await getOctokit();
     const existing = await ghGetFile(data.id);
     if (!existing) return { ok: true };
-    await octokit.repos.deleteFile({
-      owner,
-      repo,
-      branch,
-      path: `${dir}/${data.id}.md`,
-      message: `chore(blog): delete ${data.id}`,
-      sha: existing.sha,
-    });
+    try {
+      await octokit.repos.deleteFile({
+        owner,
+        repo,
+        branch,
+        path: `${dir}/${data.id}.md`,
+        message: `chore(blog): delete ${data.id}`,
+        sha: existing.sha,
+      });
+    } catch (e) {
+      throw ghError(`deleteFile(${dir}/${data.id}.md)`, e);
+    }
     return { ok: true };
   });
+
