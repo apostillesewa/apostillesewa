@@ -7,13 +7,19 @@ import { FloatingWhatsApp } from "@/components/site/FloatingWhatsApp";
 import { MobileTabBar } from "@/components/site/MobileTabBar";
 import { ArrowLeft, Calendar, Tag } from "lucide-react";
 import { SITE_URL } from "@/lib/contact";
-import { getPublishedPost } from "@/lib/github-blog.functions";
+import { getPublishedPostBundled } from "@/lib/blog-bundled";
 
 export const Route = createFileRoute("/blog/$slug")({
-  loader: async ({ params }) => {
-    const post = await getPublishedPost({ data: { slug: params.slug } });
-    if (!post) throw notFound();
-    return { post };
+  loader: ({ params }) => {
+    try {
+      const post = getPublishedPostBundled(params.slug);
+      if (!post) throw notFound();
+      return { post };
+    } catch (err) {
+      if ((err as { routerCode?: string })?.routerCode) throw err;
+      console.error(`[blog.$slug] failed to load "${params.slug}"`, err);
+      throw notFound();
+    }
   },
   head: ({ loaderData }) => {
     const p = loaderData?.post;

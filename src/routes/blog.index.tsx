@@ -1,13 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { FloatingWhatsApp } from "@/components/site/FloatingWhatsApp";
 import { MobileTabBar } from "@/components/site/MobileTabBar";
 import { BookOpen, ArrowRight, Calendar, Tag } from "lucide-react";
 import { SITE_URL } from "@/lib/contact";
-import { listPublishedPosts } from "@/lib/github-blog.functions";
+import { listPublishedPostsBundled } from "@/lib/blog-bundled";
 
 export const Route = createFileRoute("/blog/")({
   head: () => ({
@@ -20,15 +18,19 @@ export const Route = createFileRoute("/blog/")({
     ],
     links: [{ rel: "canonical", href: `${SITE_URL}/blog` }],
   }),
+  loader: () => {
+    try {
+      return { posts: listPublishedPostsBundled() };
+    } catch (err) {
+      console.error("[blog.index] failed to load bundled posts", err);
+      return { posts: [] };
+    }
+  },
   component: BlogIndex,
 });
 
 function BlogIndex() {
-  const fetchPosts = useServerFn(listPublishedPosts);
-  const { data: posts, isLoading } = useQuery({
-    queryKey: ["public-blog"],
-    queryFn: () => fetchPosts(),
-  });
+  const { posts } = Route.useLoaderData();
 
   return (
     <div className="min-h-screen bg-background pb-16 lg:pb-0">
@@ -50,17 +52,11 @@ function BlogIndex() {
         </section>
 
         <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16">
-          {isLoading ? (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {[0, 1, 2].map((i) => (
-                <div key={i} className="h-72 animate-pulse rounded-2xl border border-border bg-card" />
-              ))}
-            </div>
-          ) : !posts?.length ? (
+          {!posts?.length ? (
             <EmptyState />
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {posts.map((p) => (
+              {posts.map((p: (typeof posts)[number]) => (
                 <Link
                   key={p.slug}
                   to="/blog/$slug"
