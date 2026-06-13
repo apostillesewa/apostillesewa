@@ -34,6 +34,23 @@ async function getOctokit() {
   return new Octokit({ auth: token });
 }
 
+function ghError(op: string, e: unknown): Error {
+  const err = e as { status?: number; message?: string; response?: { data?: { message?: string; documentation_url?: string } } };
+  const status = err.status ?? 0;
+  const apiMsg = err.response?.data?.message || err.message || "unknown error";
+  const doc = err.response?.data?.documentation_url ? ` (${err.response.data.documentation_url})` : "";
+  const cfg = (() => { try { const c = ghConfig(); return ` [owner=${c.owner} repo=${c.repo} branch=${c.branch} dir=${c.dir}]`; } catch { return ""; } })();
+  let hint = "";
+  if (status === 401) hint = " — GITHUB_TOKEN is invalid or expired. Issue a new fine-grained PAT with Contents: Read/Write on this repo.";
+  else if (status === 403) hint = " — Token lacks permission. The fine-grained PAT must grant Contents: Read and write on this exact repo (and be approved by the org if applicable).";
+  else if (status === 404) hint = " — Resource not found. Verify GITHUB_OWNER, GITHUB_REPO and GITHUB_BRANCH match the actual repo on github.com, and that the token can SEE this repo (private repos require explicit selection in the PAT).";
+  else if (status === 409) hint = " — Conflict (likely stale sha). Reload the post and try again.";
+  else if (status === 422) hint = " — Validation failed. The branch may not exist, or the path is invalid.";
+  console.error(`[github-blog] ${op} failed: ${status} ${apiMsg}${doc}${cfg}`);
+  return new Error(`GitHub ${op} failed (${status || "no status"}): ${apiMsg}${hint}${cfg}`);
+}
+
+
 async function assertEditor(userId: string) {
   const { data, error } = await supabaseAdmin
     .from("user_roles")
@@ -67,7 +84,7 @@ async function ghGetFile(slug: string): Promise<{ raw: string; sha: string } | n
   } catch (e) {
     const status = (e as { status?: number }).status;
     if (status === 404) return null;
-    throw e;
+    throw ghError(`getContent(${slug}.md)`, e);
   }
 }
 
@@ -83,9 +100,10 @@ async function ghListFiles(): Promise<{ slug: string; sha: string }[]> {
   } catch (e) {
     const status = (e as { status?: number }).status;
     if (status === 404) return []; // folder doesn't exist yet
-    throw e;
+    throw ghError(`listContents(${dir})`, e);
   }
 }
+
 
 function toBase64(s: string): string {
   // Workers + Node both support btoa via the Web standard; use TextEncoder for safety.
@@ -207,31 +225,40 @@ export const upsertPost = createServerFn({ method: "POST" })
     // Slug change → delete the old file after writing the new one.
     const renamedFrom = data.id && data.id !== data.slug ? data.id : null;
 
-    await octokit.repos.createOrUpdateFileContents({
-      owner,
-      repo,
-      branch,
-      path: `${dir}/${data.slug}.md`,
-      message: `chore(blog): ${existing ? "update" : "create"} "${data.title}"`,
-      content: toBase64(md),
-      sha: existing?.sha,
-      committer: { name: "Apostille Sewa Admin", email: "admin@apostillesewa.com" },
-      author: { name: "Apostille Sewa Admin", email: "admin@apostillesewa.com" },
-    });
+    try {
+      await octokit.repos.createOrUpdateFileContents({
+        owner,
+        repo,
+        branch,
+        path: `${dir}/${data.slug}.md`,
+        message: `chore(blog): ${existing ? "update" : "create"} "${data.title}"`,
+        content: toBase64(md),
+        sha: existing?.sha,
+        committer: { name: "Apostille Sewa Admin", email: "admin@apostillesewa.com" },
+        author: { name: "Apostille Sewa Admin", email: "admin@apostillesewa.com" },
+      });
+    } catch (e) {
+      throw ghError(`createOrUpdateFileContents(${dir}/${data.slug}.md)`, e);
+    }
 
     if (renamedFrom) {
       const old = await ghGetFile(renamedFrom);
       if (old) {
-        await octokit.repos.deleteFile({
-          owner,
-          repo,
-          branch,
-          path: `${dir}/${renamedFrom}.md`,
-          message: `chore(blog): rename ${renamedFrom} → ${data.slug}`,
-          sha: old.sha,
-        });
+        try {
+          await octokit.repos.deleteFile({
+            owner,
+            repo,
+            branch,
+            path: `${dir}/${renamedFrom}.md`,
+            message: `chore(blog): rename ${renamedFrom} → ${data.slug}`,
+            sha: old.sha,
+          });
+        } catch (e) {
+          throw ghError(`deleteFile(${dir}/${renamedFrom}.md)`, e);
+        }
       }
     }
+
 
     return { id: data.slug };
   });
@@ -247,13 +274,18 @@ export const deletePost = createServerFn({ method: "POST" })
     const octokit = await getOctokit();
     const existing = await ghGetFile(data.id);
     if (!existing) return { ok: true };
-    await octokit.repos.deleteFile({
-      owner,
-      repo,
-      branch,
-      path: `${dir}/${data.id}.md`,
-      message: `chore(blog): delete ${data.id}`,
-      sha: existing.sha,
-    });
+    try {
+      await octokit.repos.deleteFile({
+        owner,
+        repo,
+        branch,
+        path: `${dir}/${data.id}.md`,
+        message: `chore(blog): delete ${data.id}`,
+        sha: existing.sha,
+      });
+    } catch (e) {
+      throw ghError(`deleteFile(${dir}/${data.id}.md)`, e);
+    }
     return { ok: true };
   });
+
