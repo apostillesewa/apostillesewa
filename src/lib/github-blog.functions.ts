@@ -11,15 +11,46 @@ import {
 const slugRe = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 // ---------- Config helpers (read at request time, never at module scope) ----------
+function cleanSegment(v: string | undefined): string {
+  if (!v) return "";
+  let s = v.trim();
+  // Strip protocol + host if a full URL was provided
+  s = s.replace(/^https?:\/\/[^/]+\//i, "");
+  // Strip git@host:owner/repo style
+  s = s.replace(/^git@[^:]+:/i, "");
+  // Strip trailing .git
+  s = s.replace(/\.git$/i, "");
+  // Trim slashes/whitespace
+  s = s.replace(/^[\/\s]+|[\/\s]+$/g, "");
+  return s;
+}
+
 function ghConfig() {
   const token = process.env.GITHUB_TOKEN;
-  const owner = process.env.GITHUB_OWNER;
-  const repo = process.env.GITHUB_REPO;
-  const branch = process.env.GITHUB_BRANCH || "main";
+  const ownerRaw = cleanSegment(process.env.GITHUB_OWNER);
+  const repoRaw = cleanSegment(process.env.GITHUB_REPO);
+  const branch = (process.env.GITHUB_BRANCH || "main").trim();
   const dir = (process.env.GITHUB_BLOGS_PATH || "src/content/blogs").replace(
     /^\/+|\/+$/g,
     ""
   );
+
+  // If GITHUB_REPO was given as "owner/repo" or a full URL, split it.
+  let owner = ownerRaw;
+  let repo = repoRaw;
+  if (repoRaw.includes("/")) {
+    const parts = repoRaw.split("/").filter(Boolean);
+    // Take the last two segments as owner/repo
+    if (parts.length >= 2) {
+      owner = owner || parts[parts.length - 2];
+      repo = parts[parts.length - 1];
+    }
+  }
+  if (!owner && ownerRaw.includes("/")) {
+    const parts = ownerRaw.split("/").filter(Boolean);
+    owner = parts[parts.length - 1];
+  }
+
   if (!token || !owner || !repo) {
     throw new Error(
       "GitHub blog storage is not configured. Set GITHUB_TOKEN, GITHUB_OWNER and GITHUB_REPO."
