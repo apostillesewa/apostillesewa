@@ -3,7 +3,7 @@ title: "PCC & SLC Attestation for Serbia: Full Nepal-to-Delhi Legalization Guide
 slug: "pcc-slc-attestation-serbia-nepal-legalization-guide"
 excerpt: "Moving to Serbia for work or study? Learn the exact PCC and SLC legalization chain from Nepal through Delhi — and how a Power of Attorney means you never have to travel."
 cover_image_url: null
-category: "Embassy Updates"
+category: "Serbia Embassy Updates"
 tags: ["apostille", "mofa", "nepal", "serbia visa", "document legalization", "pcc attestation", "slc attestation", "power of attorney"]
 status: "published"
 date: "2026-06-20T02:49:19.885Z"
