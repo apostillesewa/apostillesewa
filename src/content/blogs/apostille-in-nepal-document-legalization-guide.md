@@ -8,6 +8,7 @@ tags: ["apostille nepal", "mofa attestation", "consular services", "document leg
 status: "published"
 date: "2026-06-02T04:37:50.094+00:00"
 ---
+
 ## The Confusion Surrounding "Apostille" in Nepal
 
 If you are preparing documents to study, work, or live abroad, you have likely received a clear instruction from a foreign university, employer, or immigration department: **"You need to get your documents Apostilled."**
