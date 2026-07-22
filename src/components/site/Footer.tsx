@@ -72,7 +72,28 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col items-start justify-between gap-3 border-t border-border pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center">
+        <div className="mt-12 flex justify-center">
+          <div
+            className="trustpilot-widget"
+            data-locale="en-US"
+            data-template-id="56278e9abfbbba0bdcd568bc"
+            data-businessunit-id="6a6103c64cd5133eae3e953b"
+            data-style-height="52px"
+            data-style-width="100%"
+            data-token="c0e19964-5fcc-4b1c-9a35-f6d148181248"
+          >
+            <a
+              href="https://www.trustpilot.com/review/apostillesewa.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-muted-foreground hover:text-foreground"
+            >
+              Trustpilot
+            </a>
+          </div>
+        </div>
+
+        <div className="mt-8 flex flex-col items-start justify-between gap-3 border-t border-border pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center">
           <p>© {new Date().getFullYear()} Apostille Sewa. All rights reserved.</p>
           <p>Registered document legalization facilitator · Kathmandu</p>
         </div>
