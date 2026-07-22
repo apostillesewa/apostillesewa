@@ -72,24 +72,26 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 flex justify-center">
-          <div
-            className="trustpilot-widget"
-            data-locale="en-US"
-            data-template-id="56278e9abfbbba0bdcd568bc"
-            data-businessunit-id="6a6103c64cd5133eae3e953b"
-            data-style-height="52px"
-            data-style-width="100%"
-            data-token="c0e19964-5fcc-4b1c-9a35-f6d148181248"
-          >
-            <a
-              href="https://www.trustpilot.com/review/apostillesewa.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-muted-foreground hover:text-foreground"
+        <div className="mt-12 border-t border-border py-6">
+          <div className="mx-auto flex max-w-xl justify-center px-4">
+            <div
+              className="trustpilot-widget w-full overflow-hidden"
+              data-locale="en-US"
+              data-template-id="56278e9abfbbba0bdcd568bc"
+              data-businessunit-id="6a6103c64cd5133eae3e953b"
+              data-style-height="52px"
+              data-style-width="100%"
+              data-token="c0e19964-5fcc-4b1c-9a35-f6d148181248"
             >
-              Trustpilot
-            </a>
+              <a
+                href="https://www.trustpilot.com/review/apostillesewa.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-muted-foreground hover:text-foreground"
+              >
+                Trustpilot
+              </a>
+            </div>
           </div>
         </div>
 
