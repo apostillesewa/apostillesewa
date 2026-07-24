@@ -49,6 +49,23 @@ export function Footer() {
             ]}
           />
           <div>
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-foreground">Latest Articles</h4>
+            <ul className="mt-4 space-y-2.5 text-sm text-muted-foreground">
+              {latest.map((p) => (
+                <li key={p.slug}>
+                  <Link
+                    to="/blog/$slug"
+                    params={{ slug: p.slug }}
+                    className="line-clamp-2 hover:text-foreground"
+                  >
+                    {p.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+
             <h4 className="text-xs font-semibold uppercase tracking-wider text-foreground">Contact</h4>
             <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
               <li className="flex items-center gap-2">
