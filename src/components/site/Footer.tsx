@@ -4,12 +4,16 @@ import { Mail, Phone, MapPin, CheckCircle2, Loader2, ArrowRight } from "lucide-r
 import { LogoMark } from "./Logo";
 import { PHONE_DISPLAY, PHONE_E164, EMAIL, ADDRESS_LINE } from "@/lib/contact";
 import { subscribeNewsletter } from "@/lib/newsletter.functions";
+import { listPublishedPostsBundled } from "@/lib/blog-bundled";
+
 
 export function Footer() {
+  const latest = listPublishedPostsBundled().slice(0, 3);
   return (
     <footer className="border-t border-border bg-background">
       <div className="mx-auto max-w-7xl px-6 py-14">
-        <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+        <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr_1fr]">
+
           <div>
             <Link to="/" className="flex items-center gap-2.5" aria-label="Apostille Sewa — Home">
               <LogoMark className="h-9 w-9" />
