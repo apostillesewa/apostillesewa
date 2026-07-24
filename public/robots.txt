@@ -1,6 +1,18 @@
 User-agent: *
 Allow: /
+Allow: /blog/
 Disallow: /admin
 Disallow: /admin/
+Disallow: /auth
+Disallow: /auth/
+Disallow: /*?*
+
+User-agent: Googlebot
+Allow: /
+Allow: /blog/
+Disallow: /admin
+Disallow: /admin/
+Disallow: /auth
+Disallow: /auth/
 
 Sitemap: https://apostillesewa.com/sitemap.xml
