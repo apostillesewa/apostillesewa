@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { COUNTRIES } from "@/components/site/Destinations";
+import { listPublishedPostsBundled } from "@/lib/blog-bundled";
+
+
 
 const BASE_URL = "https://apostillesewa.com";
 
