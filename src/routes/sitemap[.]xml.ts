@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { COUNTRIES } from "@/components/site/Destinations";
+import { listPublishedPostsBundled } from "@/lib/blog-bundled";
+
+
 
 const BASE_URL = "https://apostillesewa.com";
 
@@ -15,12 +18,14 @@ interface Entry {
   path: string;
   changefreq?: "weekly" | "monthly" | "yearly";
   priority?: string;
+  lastmod?: string;
 }
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
+        const posts = listPublishedPostsBundled();
         const entries: Entry[] = [
           { path: "/", changefreq: "weekly", priority: "1.0" },
           { path: "/about", changefreq: "monthly", priority: "0.7" },
@@ -36,12 +41,19 @@ export const Route = createFileRoute("/sitemap.xml")({
             changefreq: "monthly" as const,
             priority: "0.8",
           })),
+          ...posts.map((p) => ({
+            path: `/blog/${p.slug}`,
+            changefreq: "weekly" as const,
+            priority: "0.8",
+            lastmod: p.date ? new Date(p.date).toISOString().slice(0, 10) : undefined,
+          })),
         ];
 
         const urls = entries.map((e) =>
           [
             "  <url>",
             `    <loc>${BASE_URL}${e.path}</loc>`,
+            e.lastmod ? `    <lastmod>${e.lastmod}</lastmod>` : null,
             e.changefreq ? `    <changefreq>${e.changefreq}</changefreq>` : null,
             e.priority ? `    <priority>${e.priority}</priority>` : null,
             "  </url>",
@@ -49,6 +61,7 @@ export const Route = createFileRoute("/sitemap.xml")({
             .filter(Boolean)
             .join("\n"),
         );
+
 
         const xml = [
           '<?xml version="1.0" encoding="UTF-8"?>',

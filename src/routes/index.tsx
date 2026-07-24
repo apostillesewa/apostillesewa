@@ -10,6 +10,8 @@ import { SocialProof } from "@/components/site/SocialProof";
 import { ScreeningCTA } from "@/components/site/ScreeningCTA";
 import { Footer } from "@/components/site/Footer";
 import { MobileTabBar } from "@/components/site/MobileTabBar";
+import { LatestArticles } from "@/components/site/LatestArticles";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -44,7 +46,9 @@ function Index() {
         <Destinations />
         <SocialProof />
         <ScreeningCTA />
+        <LatestArticles />
       </main>
+
       <Footer />
       <FloatingWhatsApp />
       <MobileTabBar />
