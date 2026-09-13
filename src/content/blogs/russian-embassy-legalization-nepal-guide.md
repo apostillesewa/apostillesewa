@@ -5,8 +5,8 @@ excerpt: "Complete 2026 guide to Russian Embassy document legalization in Nepal 
 cover_image_url: null
 category: "Embassy Updates"
 tags: ["russian embassy legalization nepal", "mofa attestation kathmandu", "study in russia nepal", "russian translation service nepal", "police clearance legalization russia", "apostille sewa"]
-status: "draft"
-date: null
+status: "published"
+date: "2026-09-13T09:01:02.727Z"
 ---
 
 If you need to submit official Nepali documents to authorities, universities, courts, or registries in the Russian Federation, standard notarization is not enough. Because Nepal is not a signatory to the Hague Apostille Convention for Russia, all official documents must undergo **Full Diplomatic Legalization**—a multi-tiered authentication chain ending at the Embassy of the Russian Federation in Kathmandu.
