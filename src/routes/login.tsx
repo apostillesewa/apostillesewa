@@ -5,8 +5,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { LogoMark } from "@/components/site/Logo";
 import { ArrowRight, Loader2, ShieldCheck } from "lucide-react";
+import { sanitizeRedirect } from "@/lib/safe-redirect";
 
-const searchSchema = z.object({ redirect: z.string().optional().default("/admin") });
+// `redirect` is untrusted URL input: normalise it to a safe in-app path and never
+// let it point back at a login screen (e.g. /admin/login, /signin).
+const searchSchema = z.object({
+  redirect: z.unknown().optional().transform((v) => sanitizeRedirect(v)),
+});
 
 export const Route = createFileRoute("/login")({
   head: () => ({
