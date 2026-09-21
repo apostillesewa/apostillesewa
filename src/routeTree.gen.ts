@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SuccessRouteImport } from './routes/success'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SigninRouteImport } from './routes/signin'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ContactUsRouteImport } from './routes/contact-us'
 import { Route as AboutRouteImport } from './routes/about'
@@ -20,6 +21,7 @@ import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
 import { Route as DestinationsCountryRouteImport } from './routes/destinations.$country'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
 const SuccessRoute = SuccessRouteImport.update({
@@ -30,6 +32,11 @@ const SuccessRoute = SuccessRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SigninRoute = SigninRouteImport.update({
+  id: '/signin',
+  path: '/signin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -76,6 +83,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin/login',
+  path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -87,9 +99,11 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/contact-us': typeof ContactUsRoute
   '/login': typeof LoginRoute
+  '/signin': typeof SigninRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/success': typeof SuccessRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/admin/login': typeof AdminLoginRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/destinations/$country': typeof DestinationsCountryRoute
   '/services/$slug': typeof ServicesSlugRoute
@@ -100,9 +114,11 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/contact-us': typeof ContactUsRoute
   '/login': typeof LoginRoute
+  '/signin': typeof SigninRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/success': typeof SuccessRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/admin/login': typeof AdminLoginRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/destinations/$country': typeof DestinationsCountryRoute
   '/services/$slug': typeof ServicesSlugRoute
@@ -115,9 +131,11 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/contact-us': typeof ContactUsRoute
   '/login': typeof LoginRoute
+  '/signin': typeof SigninRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/success': typeof SuccessRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/admin/login': typeof AdminLoginRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/destinations/$country': typeof DestinationsCountryRoute
   '/services/$slug': typeof ServicesSlugRoute
@@ -130,9 +148,11 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact-us'
     | '/login'
+    | '/signin'
     | '/sitemap.xml'
     | '/success'
     | '/admin'
+    | '/admin/login'
     | '/blog/$slug'
     | '/destinations/$country'
     | '/services/$slug'
@@ -143,9 +163,11 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact-us'
     | '/login'
+    | '/signin'
     | '/sitemap.xml'
     | '/success'
     | '/admin'
+    | '/admin/login'
     | '/blog/$slug'
     | '/destinations/$country'
     | '/services/$slug'
@@ -157,9 +179,11 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact-us'
     | '/login'
+    | '/signin'
     | '/sitemap.xml'
     | '/success'
     | '/_authenticated/admin'
+    | '/admin/login'
     | '/blog/$slug'
     | '/destinations/$country'
     | '/services/$slug'
@@ -172,8 +196,10 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   ContactUsRoute: typeof ContactUsRoute
   LoginRoute: typeof LoginRoute
+  SigninRoute: typeof SigninRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SuccessRoute: typeof SuccessRoute
+  AdminLoginRoute: typeof AdminLoginRoute
   BlogSlugRoute: typeof BlogSlugRoute
   DestinationsCountryRoute: typeof DestinationsCountryRoute
   ServicesSlugRoute: typeof ServicesSlugRoute
@@ -194,6 +220,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signin': {
+      id: '/signin'
+      path: '/signin'
+      fullPath: '/signin'
+      preLoaderRoute: typeof SigninRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -259,6 +292,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/admin': {
       id: '/_authenticated/admin'
       path: '/admin'
@@ -287,8 +327,10 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   ContactUsRoute: ContactUsRoute,
   LoginRoute: LoginRoute,
+  SigninRoute: SigninRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SuccessRoute: SuccessRoute,
+  AdminLoginRoute: AdminLoginRoute,
   BlogSlugRoute: BlogSlugRoute,
   DestinationsCountryRoute: DestinationsCountryRoute,
   ServicesSlugRoute: ServicesSlugRoute,
@@ -297,3 +339,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

@@ -7,10 +7,8 @@ import { LogoMark } from "@/components/site/Logo";
 import { ArrowRight, Loader2, ShieldCheck } from "lucide-react";
 import { sanitizeRedirect } from "@/lib/safe-redirect";
 
-// `redirect` is untrusted URL input: normalise it to a safe in-app path and never
-// let it point back at a login screen (e.g. /admin/login, /signin).
 const searchSchema = z.object({
-  redirect: z.unknown().optional().transform((v) => sanitizeRedirect(v)),
+  redirect: z.unknown().optional().transform(sanitizeRedirect),
 });
 
 export const Route = createFileRoute("/login")({
