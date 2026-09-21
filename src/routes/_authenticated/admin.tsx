@@ -25,9 +25,16 @@ function AdminDashboard() {
   const navigate = useNavigate();
   const [tab, setTab] = useState<Tab>("posts");
   const fetchRoles = useServerFn(getMyRoles);
-  const { data: rolesInfo, isLoading: rolesLoading } = useQuery({
+  const {
+    data: rolesInfo,
+    isLoading: rolesLoading,
+    error: rolesError,
+    refetch: refetchRoles,
+    isFetching: rolesFetching,
+  } = useQuery({
     queryKey: ["my-roles"],
     queryFn: () => fetchRoles(),
+    retry: false,
   });
 
   const isAdmin = rolesInfo?.roles?.includes("admin") ?? false;
@@ -40,6 +47,17 @@ function AdminDashboard() {
 
   if (rolesLoading) {
     return <CenterLoader />;
+  }
+
+  if (rolesError) {
+    return (
+      <RolesErrorScreen
+        message={rolesError instanceof Error ? rolesError.message : String(rolesError)}
+        busy={rolesFetching}
+        onRetry={() => refetchRoles()}
+        onSignOut={signOut}
+      />
+    );
   }
 
   if (!isEditor) {
