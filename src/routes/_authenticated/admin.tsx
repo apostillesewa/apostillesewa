@@ -25,9 +25,15 @@ function AdminDashboard() {
   const navigate = useNavigate();
   const [tab, setTab] = useState<Tab>("posts");
   const fetchRoles = useServerFn(getMyRoles);
-  const { data: rolesInfo, isLoading: rolesLoading } = useQuery({
+  const {
+    data: rolesInfo,
+    isLoading: rolesLoading,
+    error: rolesError,
+    refetch: refetchRoles,
+  } = useQuery({
     queryKey: ["my-roles"],
     queryFn: () => fetchRoles(),
+    retry: false,
   });
 
   const isAdmin = rolesInfo?.roles?.includes("admin") ?? false;
@@ -40,6 +46,19 @@ function AdminDashboard() {
 
   if (rolesLoading) {
     return <CenterLoader />;
+  }
+
+  // A failed role lookup (server misconfiguration, expired token, ...) is not the
+  // same thing as "no role assigned" — show the real error instead of a misleading
+  // "No admin access" screen.
+  if (rolesError) {
+    return (
+      <RolesError
+        message={rolesError instanceof Error ? rolesError.message : String(rolesError)}
+        onRetry={() => refetchRoles()}
+        onSignOut={signOut}
+      />
+    );
   }
 
   if (!isEditor) {
@@ -97,6 +116,40 @@ function CenterLoader() {
   return (
     <div className="flex min-h-screen items-center justify-center">
       <Loader2 className="h-6 w-6 animate-spin text-primary" />
+    </div>
+  );
+}
+
+function RolesError({
+  message,
+  onRetry,
+  onSignOut,
+}: {
+  message: string;
+  onRetry: () => void;
+  onSignOut: () => void;
+}) {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-[var(--surface)] px-4">
+      <div className="max-w-md rounded-2xl border border-border bg-card p-8 text-center shadow-card">
+        <ShieldCheck className="mx-auto h-8 w-8 text-destructive" />
+        <h1 className="mt-3 text-xl font-bold text-foreground">Couldn't verify your access</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          You're signed in, but the server could not check your role. This is a server/configuration
+          problem, not a missing role.
+        </p>
+        <p className="mt-3 break-words rounded-md bg-destructive/10 px-3 py-2 text-left text-[11px] text-destructive">
+          {message}
+        </p>
+        <div className="mt-4 flex justify-center gap-2">
+          <button onClick={onRetry} className="rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90">
+            Try again
+          </button>
+          <button onClick={onSignOut} className="inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-xs font-semibold hover:bg-muted">
+            <LogOut className="h-3.5 w-3.5" /> Sign out
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
