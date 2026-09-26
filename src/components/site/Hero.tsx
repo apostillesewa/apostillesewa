@@ -10,7 +10,7 @@ export function Hero() {
       const script = document.createElement("script");
       script.src = FEATURABLE_SRC;
       script.defer = true;
-      script.charSet = "UTF-8";
+      script.charset = "UTF-8";
       document.body.appendChild(script);
     }
   }, []);
