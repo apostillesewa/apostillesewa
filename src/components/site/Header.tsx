@@ -104,6 +104,12 @@ export function Header() {
                   {d.label}
                 </button>
               ))}
+              <button
+                onClick={() => go("/destinations")}
+                className="col-span-2 rounded-md px-3 py-2 text-left text-sm font-semibold text-primary transition-colors hover:bg-muted"
+              >
+                All destinations →
+              </button>
             </div>
           </DropdownButton>
 
