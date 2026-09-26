@@ -1,7 +1,20 @@
+import { useEffect } from "react";
 import { Star, ShieldCheck, FileCheck2 } from "lucide-react";
 import { PathFinder } from "./PathFinder";
 
+const FEATURABLE_SRC = "https://featurable.com/assets/bundle.js";
+
 export function Hero() {
+  useEffect(() => {
+    if (!document.querySelector(`script[src="${FEATURABLE_SRC}"]`)) {
+      const script = document.createElement("script");
+      script.src = FEATURABLE_SRC;
+      script.defer = true;
+      script.charset = "UTF-8";
+      document.body.appendChild(script);
+    }
+  }, []);
+
   return (
     <section className="relative overflow-hidden border-b border-border bg-background">
       {/* Ultra-faint engineering grid */}
@@ -54,8 +67,16 @@ export function Hero() {
 
         <div className="lg:pl-4">
           <PathFinder />
+          </div>
+
+          {/* Featurable reviews widget */}
+          <div className="mt-6 max-w-xl">
+            <div
+              id="featurable-6136dad8-628a-4922-b8e3-72af38c79bac"
+              data-featurable-async
+            />
+          </div>
         </div>
-      </div>
     </section>
   );
 }

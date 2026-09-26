@@ -6,7 +6,6 @@ import { Hero } from "@/components/site/Hero";
 import { AuthorityStrip } from "@/components/site/AuthorityStrip";
 import { Process } from "@/components/site/Process";
 import { Destinations } from "@/components/site/Destinations";
-import { SocialProof } from "@/components/site/SocialProof";
 import { ScreeningCTA } from "@/components/site/ScreeningCTA";
 import { Footer } from "@/components/site/Footer";
 import { MobileTabBar } from "@/components/site/MobileTabBar";
@@ -44,8 +43,8 @@ function Index() {
         <AuthorityStrip />
         <Process />
         <Destinations />
-        <SocialProof />
         <ScreeningCTA />
+
         <LatestArticles />
       </main>
 
