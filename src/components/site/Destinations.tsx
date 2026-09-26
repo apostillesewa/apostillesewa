@@ -25,7 +25,7 @@ export function Destinations() {
         </div>
 
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {COUNTRIES.map((c) => (
+          {FEATURED.map((c) => (
             <Link
               key={c.slug}
               to="/destinations/$country"
@@ -45,6 +45,11 @@ export function Destinations() {
               </div>
             </Link>
           ))}
+        </div>
+        <div className="mt-8 text-center">
+          <Link to="/destinations" className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline">
+            View all {ALL.length} destination hubs <ArrowUpRight className="h-4 w-4" />
+          </Link>
         </div>
       </div>
     </section>

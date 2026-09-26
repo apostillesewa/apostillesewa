@@ -46,6 +46,7 @@ export function Footer() {
               { label: "Malta", to: "/destinations/malta" },
               { label: "Portugal", to: "/destinations/portugal" },
               { label: "Cyprus", to: "/destinations/cyprus" },
+              { label: "All destinations →", to: "/destinations" },
             ]}
           />
           <div>

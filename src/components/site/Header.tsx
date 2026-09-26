@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { Logo } from "./Logo";
 import { WHATSAPP_BASE } from "@/lib/contact";
+import { COUNTRIES } from "@/lib/countries";
 
 type ServiceItem = { label: string; to: string; description: string; icon: typeof Stamp };
 type DestinationItem = { label: string; slug: string };
@@ -24,12 +25,7 @@ const SERVICES: ServiceItem[] = [
 ];
 
 const DESTINATIONS: DestinationItem[] = [
-  { label: "Poland", slug: "poland" },
-  { label: "Germany", slug: "germany" },
-  { label: "Croatia", slug: "croatia" },
-  { label: "Malta", slug: "malta" },
-  { label: "Portugal", slug: "portugal" },
-  { label: "Cyprus", slug: "cyprus" },
+  ...COUNTRIES.filter((c) => c.featured).map((c) => ({ label: c.name, slug: c.slug })),
 ];
 
 export function Header() {
