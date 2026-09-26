@@ -1,20 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
-import { Flag, type CountryCode } from "./Flag";
+import { Flag } from "./Flag";
+import { COUNTRIES as ALL } from "@/lib/countries";
 
-export const COUNTRIES: {
-  slug: string;
-  name: string;
-  code: CountryCode;
-  note: string;
-}[] = [
-  { slug: "poland", code: "PL", name: "Poland", note: "Required for: Work Permits & National Visas. Includes: Full MOFA + Embassy Stamping." },
-  { slug: "germany", code: "DE", name: "Germany", note: "Required for: Student & Blue Card Visas. Includes: MOFA + Anabin recognition guidance." },
-  { slug: "croatia", code: "HR", name: "Croatia", note: "Required for: Seasonal & Work Permits. Includes: Full MOFA + Embassy Stamping." },
-  { slug: "malta", code: "MT", name: "Malta", note: "Required for: Single Permit Applications. Includes: MOFA + Apostille verification." },
-  { slug: "portugal", code: "PT", name: "Portugal", note: "Required for: Job-Seeker & D7 Visas. Includes: MOFA + Apostille for SEF." },
-  { slug: "cyprus", code: "CY", name: "Cyprus", note: "Required for: Work & Student Permits. Includes: Full MOFA + Embassy Stamping." },
-];
+export { COUNTRIES } from "@/lib/countries";
+const FEATURED = ALL.filter((c) => c.featured);
 
 export function Destinations() {
   return (
