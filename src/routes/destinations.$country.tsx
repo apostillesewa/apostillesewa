@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Header } from "@/components/site/Header";
 import { FloatingWhatsApp } from "@/components/site/FloatingWhatsApp";
 import { Footer } from "@/components/site/Footer";
-import { COUNTRIES } from "@/components/site/Destinations";
+import { getCountry, relatedPostsFor } from "@/lib/countries";
 import { Flag } from "@/components/site/Flag";
 import { ArrowLeft, CheckCircle2, Clock, FileText, Stamp, Building2, Send, ArrowRight, MessageCircle, ChevronDown } from "lucide-react";
 
@@ -27,9 +27,9 @@ const CHECKLIST: Record<string, { step: string; detail: string; icon: typeof Sta
 
 export const Route = createFileRoute("/destinations/$country")({
   loader: ({ params }) => {
-    const country = COUNTRIES.find((c) => c.slug === params.country);
+    const country = getCountry(params.country);
     if (!country) throw notFound();
-    return { country };
+    return { country, related: relatedPostsFor(country) };
   },
   head: ({ loaderData, params }) => ({
     meta: [
@@ -41,14 +41,30 @@ export const Route = createFileRoute("/destinations/$country")({
       { property: "og:title", content: `${loaderData?.country.name} Document Legalization — Apostille Sewa` },
       { property: "og:description", content: `Step-by-step MOFA + embassy legalization for ${loaderData?.country.name}.` },
       { property: "og:url", content: `${SITE_URL}/destinations/${params.country}` },
+      { property: "og:type", content: "article" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: `${SITE_URL}/destinations/${params.country}` }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+            { "@type": "ListItem", position: 2, name: "Destinations", item: `${SITE_URL}/destinations` },
+            { "@type": "ListItem", position: 3, name: loaderData?.country.name, item: `${SITE_URL}/destinations/${params.country}` },
+          ],
+        }),
+      },
+    ],
   }),
   component: CountryPage,
 });
 
 function CountryPage() {
-  const { country } = Route.useLoaderData();
+  const { country, related } = Route.useLoaderData();
   const checklist = CHECKLIST.default;
   const [submitted, setSubmitted] = useState(false);
   const [name, setName] = useState("");
@@ -66,7 +82,7 @@ function CountryPage() {
       <main>
         <section className="border-b border-border bg-[var(--surface)]">
           <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-14">
-            <Link to="/" className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground">
+            <Link to="/destinations" className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground">
               <ArrowLeft className="h-3.5 w-3.5" /> Back to all destinations
             </Link>
             <div className="mt-6 flex flex-wrap items-center gap-5">
@@ -118,6 +134,28 @@ function CountryPage() {
                   </li>
                 ))}
               </ol>
+
+              {related.length > 0 && (
+                <div className="mt-12">
+                  <h2 className="text-xl font-bold tracking-tight text-foreground">
+                    {country.name} Legalization Guides
+                  </h2>
+                  <ul className="mt-5 space-y-3">
+                    {related.map((p) => (
+                      <li key={p.slug}>
+                        <Link
+                          to="/blog/$slug"
+                          params={{ slug: p.slug }}
+                          className="block rounded-xl border border-border bg-card p-4 transition-colors hover:border-primary/30"
+                        >
+                          <span className="font-semibold text-foreground">{p.title}</span>
+                          {p.excerpt && <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{p.excerpt}</p>}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
 
             <aside className="lg:sticky lg:top-24 lg:self-start">
