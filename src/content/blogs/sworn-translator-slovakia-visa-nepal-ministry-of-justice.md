@@ -5,8 +5,8 @@ excerpt: "Applying for a Slovakia study or work visa from Nepal? Learn the corre
 cover_image_url: null
 category: "Embassy Updates"
 tags: ["sworn translator", "slovakia visa", "nepal", "ministry of justice", "superlegalisation", "embassy", "study abroad", "work visa", "apostille"]
-status: "draft"
-date: null
+status: "published"
+date: "2026-11-10T06:10:20.419Z"
 ---
 
 ## Introduction
